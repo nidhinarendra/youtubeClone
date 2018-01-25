@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash'; //using _ when working with lodash is a standard
 import ReactDOM from 'react-dom';
 import YTSearch from 'youtube-api-search';
 import SearchBar from './components/search_bar';
@@ -28,9 +29,12 @@ class App extends Component {
   }
 
   render() {
+    const videoSearch = _.debounce(term => {
+      this.videoSearch(term);
+    }, 300); //this causes a 300 ms delay in between the searches instead of kicking the search function everytime a letter is typed on the search bar
     return (
       <div>
-        <SearchBar onSearchTermChange={term => this.videoSearch(term)} />
+        <SearchBar onSearchTermChange={videoSearch} />
         <VideoDetail video={this.state.selectedVideo} />
         <VideoList
           onVideoSelect={selectedVideo => this.setState({ selectedVideo })}
